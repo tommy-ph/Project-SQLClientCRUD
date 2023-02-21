@@ -12,12 +12,12 @@ namespace Project_SQLClientCRUD.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        public List<Customer> GetAllCustomers()
+        public string ConnectionString { get; set; }
+        public IEnumerable<Customer> GetAllCustomers()
         {
-            List<Customer> custList = new List<Customer>();
+            IEnumerable<Customer> custList = new List<Customer>();
             string sql = "SELECT CustomerId, FirstName, LastName, Company, Address, City, State, PostalCode, Phone, Fax, Email FROM Customer";
-            try
-            {
+           
                 //Connect
                 using (SqlConnection conn = new SqlConnection(ConnectionstringHelper.GetConnectionString())) 
                 {
@@ -31,30 +31,22 @@ namespace Project_SQLClientCRUD.Repositories
                             while(reader.Read())
                             {
                                 //Handle result
-                                Customer temp = new Customer();
-                                temp.CustomerId = reader.GetInt32(0);
-                                temp.FirstName = reader.GetString(1);
-                                temp.LastName = reader.GetString(2); 
-                                temp.Company = reader.IsDBNull(3) ? string.Empty : reader.GetString(3);
-                                temp.Address = reader.GetString(4);
-                                temp.City = reader.GetString(5); 
-                                temp.State = reader.IsDBNull(6) ? string.Empty : reader.GetString(6);
-                                temp.PostalCode = reader.IsDBNull(7) ? string.Empty : reader.GetString(7);
-                                temp.Phone = reader.IsDBNull(8) ? string.Empty : reader.GetString(8);
-                                temp.Fax = reader.IsDBNull(9) ? string.Empty : reader.GetString(9);
-                                //temp.SupportRepId = reader.GetInt32(10);
+                                yield return new Customer() 
+                                { CustomerId = reader.GetInt32(0),
+                                  FirstName = reader.GetString(1),
+                                  LastName = reader.GetString(2),
+                                  Company = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
+                                  Address = reader.GetString(4),
+                                  City = reader.GetString(5),
+                                  State = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
+                                  PostalCode = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
+                                  Phone = reader.IsDBNull(8) ? string.Empty : reader.GetString(8),
+                                  Fax = reader.IsDBNull(9) ? string.Empty : reader.GetString(9),
+                                };
                             }
-                            reader.Close();
                         }
                     }                                   
                 }
-            }
-            catch (SqlException ex)
-            {
-                //Log error
-            }
-           return custList;
-
         }
 
         public Customer GetCustomer(string id)

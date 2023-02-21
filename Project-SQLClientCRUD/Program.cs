@@ -5,17 +5,17 @@ using System.Numerics;
 
 namespace Project_SQLClientCRUD
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            ICustomerRepository repository = new CustomerRepository();
-            SelectAllCustomer(repository);
+            var repository = new CustomerRepository { ConnectionString = ConnectionstringHelper.GetConnectionString() };
+            SelectAllCustomers(repository);
             //Get all the Customer
             // CRUD
         }
 
-        static void SelectAllCustomer(ICustomerRepository repository)
+        static void SelectAllCustomers(ICustomerRepository repository)
         {
             PrintCustomers(repository.GetAllCustomers());
         }
@@ -35,7 +35,7 @@ namespace Project_SQLClientCRUD
 
         static void PrintCustomer(Customer customer)
         {
-            Console.WriteLine($"--- {customer.CustomerId} {customer.FirstName} {customer.LastName} {customer.Company} {customer.Address} {customer.City} {customer.State} {customer.PostalCode} {customer.Phone} {customer.Fax} {customer.Email} {customer.SupportRepId} ---");
+            Console.WriteLine($"--- {customer.CustomerId} {customer.FirstName} {customer.LastName} {customer.Company} {customer.Address} {customer.City} {customer.State} {customer.PostalCode} {customer.Phone} {customer.Fax} {customer.Email} ---");
         }
 
         static void Insert(ICustomerRepository repository)
