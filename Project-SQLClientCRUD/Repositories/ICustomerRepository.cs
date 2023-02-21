@@ -10,7 +10,7 @@ namespace Project_SQLClientCRUD.Repositories
     public interface ICustomerRepository
     {
         public Customer GetCustomer(string id);
-        public List<Customer> GetAllCustomers();
+        public IEnumerable<Customer> GetAllCustomers();
         public bool AddNewCustomer(Customer customer);
         public bool UpdateCustomer(Customer customer);
         public bool DeleteCustomer(string id);
