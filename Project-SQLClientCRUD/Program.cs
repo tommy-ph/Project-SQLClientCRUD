@@ -11,7 +11,8 @@ namespace Project_SQLClientCRUD
         {
             var repository = new CustomerRepository { ConnectionString = ConnectionstringHelper.GetConnectionString() };
             //SelectAllCustomers(repository);
-            SelectCustomer(repository);
+            //SelectCustomerById(repository);
+            SelectCustomerByName(repository);
             //Get all the Customer
             // CRUD
         }
@@ -21,9 +22,14 @@ namespace Project_SQLClientCRUD
             PrintCustomers(repository.GetAllCustomers());
         }
 
-        static void SelectCustomer(ICustomerRepository repository)
+        static void SelectCustomerById(ICustomerRepository repository)
         {
             PrintCustomer(repository.GetCustomer("1"));
+        }
+
+        static void SelectCustomerByName(ICustomerRepository repository)
+        {
+            PrintCustomer(repository.GetCustomerByName("Luís"));
         }
 
         static void PrintCustomers(IEnumerable<Customer> customers)
