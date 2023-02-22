@@ -10,13 +10,15 @@ namespace Project_SQLClientCRUD
     {
         static void Main(string[] args)
         {
+            // CRUD
             var repository = new CustomerRepository { ConnectionString = ConnectionstringHelper.GetConnectionString() };
             //SelectAllCustomers(repository);
             //SelectCustomerById(repository);
             //SelectCustomerByName(repository);
-            SelectCustomersPage(repository);
-            //Get all the Customer
-            // CRUD
+            //SelectCustomersPage(repository);
+            Insert(repository);
+            
+            
         }
 
         static void SelectAllCustomers(ICustomerRepository repository)
@@ -51,21 +53,21 @@ namespace Project_SQLClientCRUD
 
         static void PrintCustomer(Customer customer)
         {
-            Console.WriteLine($"--- {customer.CustomerId} {customer.FirstName} {customer.LastName} {customer.Company} {customer.Address} {customer.City} {customer.State} {customer.PostalCode} {customer.Phone} {customer.Fax} {customer.Email} ---");
+            Console.WriteLine($"--- {customer.CustomerId} {customer.FirstName} {customer.LastName} {customer.Country} {customer.PostalCode} {customer.Phone} {customer.Email} ---");
         }
 
         static void PrintCustomersPage(List<Customer> customers)
         {
             foreach (Customer customer in customers)
             {
-                Console.WriteLine("{0} {1}, {2}", customer.FirstName, customer.LastName, customer.Company);
-                Console.WriteLine("{0}", customer.Address);
-                Console.WriteLine("{0}, {1} {2}", customer.City, customer.State, customer.PostalCode);
+                Console.WriteLine("{0} {1}", customer.FirstName, customer.LastName);
+                Console.WriteLine("{0}", customer.Country);
+                Console.WriteLine("{0}", customer.PostalCode);
                 Console.WriteLine("{0}", customer.Phone);
+                Console.WriteLine("{0}", customer.Email);
                 Console.WriteLine("----------------------------");
             }
         }
-
 
         static void Insert(ICustomerRepository repository)
         {
@@ -74,12 +76,9 @@ namespace Project_SQLClientCRUD
                 FirstName = "Tommy",
                 LastName = "Pham",
                 Company = "Experis",
-                Address = "Gothenburg",
-                City = "Gothenburg",
-                State = "Gothenburg",
+                Country = "Sweden",
                 PostalCode = "12345",
                 Phone = "0725559559",
-                Fax = "321123123",
                 Email = "tommy.experis@se.com",
 
             };

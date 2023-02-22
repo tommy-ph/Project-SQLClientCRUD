@@ -16,7 +16,7 @@ namespace Project_SQLClientCRUD.Repositories
         public IEnumerable<Customer> GetAllCustomers()
         {
             IEnumerable<Customer> custList = new List<Customer>();
-            string sql = "SELECT CustomerId, FirstName, LastName, Company, Address, City, State, PostalCode, Phone, Fax, Email FROM Customer";
+            string sql = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Fax, Email FROM Customer";
            
                 //Connect
                 using (SqlConnection conn = new SqlConnection(ConnectionstringHelper.GetConnectionString())) 
@@ -32,16 +32,14 @@ namespace Project_SQLClientCRUD.Repositories
                             {
                                 //Handle result
                                 yield return new Customer() 
-                                { CustomerId = reader.GetInt32(0),
-                                  FirstName = reader.GetString(1),
-                                  LastName = reader.GetString(2),
-                                  Company = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
-                                  Address = reader.GetString(4),
-                                  City = reader.GetString(5),
-                                  State = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
-                                  PostalCode = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
-                                  Phone = reader.IsDBNull(8) ? string.Empty : reader.GetString(8),
-                                  Fax = reader.IsDBNull(9) ? string.Empty : reader.GetString(9),
+                                {
+                                    CustomerId = reader.GetInt32(0),
+                                    FirstName = reader.GetString(1),
+                                    LastName = reader.GetString(2),
+                                    Country = reader.GetString(3),
+                                    PostalCode = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
+                                    Phone = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
+                                    Email = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
                                 };
                             }
                         }
@@ -52,7 +50,7 @@ namespace Project_SQLClientCRUD.Repositories
         public Customer GetCustomer(string id)
         {
             Customer customer = null;
-            string sql = "SELECT CustomerId, FirstName, LastName, Company, Address, City, State, PostalCode, Phone, Fax, Email FROM Customer " +
+            string sql = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer " +
                          "WHERE CustomerId = @CustomerId";
             //Connect
             using (SqlConnection conn = new SqlConnection(ConnectionstringHelper.GetConnectionString()))
@@ -74,13 +72,10 @@ namespace Project_SQLClientCRUD.Repositories
                                 CustomerId = reader.GetInt32(0),
                                 FirstName = reader.GetString(1),
                                 LastName = reader.GetString(2),
-                                Company = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
-                                Address = reader.GetString(4),
-                                City = reader.GetString(5),
-                                State = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
-                                PostalCode = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
-                                Phone = reader.IsDBNull(8) ? string.Empty : reader.GetString(8),
-                                Fax = reader.IsDBNull(9) ? string.Empty : reader.GetString(9),
+                                Country = reader.GetString(3),
+                                PostalCode = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
+                                Phone = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
+                                Email = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
                             };
                         }
                     }
@@ -92,7 +87,7 @@ namespace Project_SQLClientCRUD.Repositories
         public Customer GetCustomerByName(string name)
         {
             Customer customer = null;
-            string sql = "SELECT CustomerId, FirstName, LastName, Company, Address, City, State, PostalCode, Phone, Fax, Email FROM Customer " +
+            string sql = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer " +
                          "WHERE FirstName = @FirstName";
             //Connect
             using (SqlConnection conn = new SqlConnection(ConnectionstringHelper.GetConnectionString()))
@@ -114,13 +109,10 @@ namespace Project_SQLClientCRUD.Repositories
                                 CustomerId = reader.GetInt32(0),
                                 FirstName = reader.GetString(1),
                                 LastName = reader.GetString(2),
-                                Company = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
-                                Address = reader.GetString(4),
-                                City = reader.GetString(5),
-                                State = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
-                                PostalCode = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
-                                Phone = reader.IsDBNull(8) ? string.Empty : reader.GetString(8),
-                                Fax = reader.IsDBNull(9) ? string.Empty : reader.GetString(9),
+                                Country = reader.GetString(3),
+                                PostalCode = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
+                                Phone = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
+                                Email = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
                             };
                         }
                     }
@@ -134,8 +126,8 @@ namespace Project_SQLClientCRUD.Repositories
             List<Customer> customers = new List<Customer>();
 
             // Create a SQL query that retrieves a page of customers from the database
-            string sql = "SELECT CustomerId, FirstName, LastName, " +
-                "Company, Address, City, State, PostalCode, Phone, Fax, Email FROM Customer ORDER BY CustomerId OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY;";
+            string sql = "SELECT CustomerId, FirstName, LastName, Country, " +
+                "PostalCode, Phone, Email FROM Customer ORDER BY CustomerId OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY;";
                         
             using (SqlConnection conn = new SqlConnection(ConnectionstringHelper.GetConnectionString()))
             {
@@ -150,18 +142,16 @@ namespace Project_SQLClientCRUD.Repositories
                         Customer customer;
                         while (reader.Read())
                         {
+                            //Handle result
                             customer = new Customer()
                             {
                                 CustomerId = reader.GetInt32(0),
                                 FirstName = reader.GetString(1),
                                 LastName = reader.GetString(2),
-                                Company = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
-                                Address = reader.GetString(4),
-                                City = reader.GetString(5),
-                                State = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
-                                PostalCode = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
-                                Phone = reader.IsDBNull(8) ? string.Empty : reader.GetString(8),
-                                Fax = reader.IsDBNull(9) ? string.Empty : reader.GetString(9),
+                                Country = reader.GetString(3),
+                                PostalCode = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
+                                Phone = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
+                                Email = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
                             };
                             customers.Add(customer);
                         }
@@ -175,8 +165,26 @@ namespace Project_SQLClientCRUD.Repositories
 
         public bool AddNewCustomer(Customer customer)
         {
-            throw new NotImplementedException();
+            bool success = false;
+            string sql = "INSERT INTO Customer (FirstName, LastName, Country, PostalCode, Phone, Email) " +
+                         "VALUES (@FirstName, @LastName, @Country, @PostalCode, @Phone, @Email)";
+            using (SqlConnection conn = new SqlConnection(ConnectionstringHelper.GetConnectionString()))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                    cmd.Parameters.AddWithValue("@LastName", customer.LastName);
+                    cmd.Parameters.AddWithValue("@Country", customer.Country);
+                    cmd.Parameters.AddWithValue("@PostalCode", customer.PostalCode);
+                    cmd.Parameters.AddWithValue("@Phone", customer.Phone);
+                    cmd.Parameters.AddWithValue("@Email", customer.Email);
+                    success = cmd.ExecuteNonQuery() > 0;
+                }
+            }
+            return success;
         }
+
 
         public bool DeleteCustomer(string id)
         {
