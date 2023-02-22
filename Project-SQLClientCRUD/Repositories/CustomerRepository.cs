@@ -193,9 +193,31 @@ namespace Project_SQLClientCRUD.Repositories
 
         public bool UpdateCustomer(Customer customer)
         {
-            throw new NotImplementedException();
+
+            bool success = false;
+            string sql = "UPDATE Customer "+
+                "SET FirstName = @FirstName, LastName = @LastName, " +
+                "Country = @Country, PostalCode = @PostalCode, Phone = @Phone, Email = @Email";
+            using (SqlConnection conn = new SqlConnection(ConnectionstringHelper.GetConnectionString()))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                    cmd.Parameters.AddWithValue("@LastName", customer.LastName);
+                    cmd.Parameters.AddWithValue("@Country", customer.Country);
+                    cmd.Parameters.AddWithValue("@PostalCode", customer.PostalCode);
+                    cmd.Parameters.AddWithValue("@Phone", customer.Phone);
+                    cmd.Parameters.AddWithValue("@Email", customer.Email);
+                    success = cmd.ExecuteNonQuery() > 0;
+                }
+            }
+            return success;
         }
 
-        
+        public List<Customer> GetTopSpenders()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
