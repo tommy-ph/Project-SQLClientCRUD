@@ -1,5 +1,6 @@
 ﻿using Project_SQLClientCRUD.Models;
 using Project_SQLClientCRUD.Repositories;
+using System.Collections.Generic;
 using System.Net;
 using System.Numerics;
 
@@ -12,7 +13,8 @@ namespace Project_SQLClientCRUD
             var repository = new CustomerRepository { ConnectionString = ConnectionstringHelper.GetConnectionString() };
             //SelectAllCustomers(repository);
             //SelectCustomerById(repository);
-            SelectCustomerByName(repository);
+            //SelectCustomerByName(repository);
+            SelectCustomersPage(repository);
             //Get all the Customer
             // CRUD
         }
@@ -32,6 +34,13 @@ namespace Project_SQLClientCRUD
             PrintCustomer(repository.GetCustomerByName("Luís"));
         }
 
+        static void SelectCustomersPage(ICustomerRepository repository)
+        {
+            int limit = 5;
+            int offset = 0;
+            PrintCustomersPage(repository.GetCustomersPage(limit, offset));
+        }
+
         static void PrintCustomers(IEnumerable<Customer> customers)
         {
             foreach(Customer customer in customers)
@@ -44,6 +53,19 @@ namespace Project_SQLClientCRUD
         {
             Console.WriteLine($"--- {customer.CustomerId} {customer.FirstName} {customer.LastName} {customer.Company} {customer.Address} {customer.City} {customer.State} {customer.PostalCode} {customer.Phone} {customer.Fax} {customer.Email} ---");
         }
+
+        static void PrintCustomersPage(List<Customer> customers)
+        {
+            foreach (Customer customer in customers)
+            {
+                Console.WriteLine("{0} {1}, {2}", customer.FirstName, customer.LastName, customer.Company);
+                Console.WriteLine("{0}", customer.Address);
+                Console.WriteLine("{0}, {1} {2}", customer.City, customer.State, customer.PostalCode);
+                Console.WriteLine("{0}", customer.Phone);
+                Console.WriteLine("----------------------------");
+            }
+        }
+
 
         static void Insert(ICustomerRepository repository)
         {

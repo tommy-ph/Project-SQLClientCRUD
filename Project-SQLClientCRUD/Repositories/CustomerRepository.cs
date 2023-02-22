@@ -128,6 +128,51 @@ namespace Project_SQLClientCRUD.Repositories
             }
             return customer;
         }
+
+        public List<Customer> GetCustomersPage(int limit, int offset)
+        {
+            List<Customer> customers = new List<Customer>();
+
+            // Create a SQL query that retrieves a page of customers from the database
+            string sql = "SELECT CustomerId, FirstName, LastName, " +
+                "Company, Address, City, State, PostalCode, Phone, Fax, Email FROM Customer ORDER BY CustomerId OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY;";
+                        
+            using (SqlConnection conn = new SqlConnection(ConnectionstringHelper.GetConnectionString()))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.Add("@limit", System.Data.SqlDbType.Int).Value = limit;
+                    cmd.Parameters.Add("@offset", System.Data.SqlDbType.Int).Value = offset;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        Customer customer;
+                        while (reader.Read())
+                        {
+                            customer = new Customer()
+                            {
+                                CustomerId = reader.GetInt32(0),
+                                FirstName = reader.GetString(1),
+                                LastName = reader.GetString(2),
+                                Company = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
+                                Address = reader.GetString(4),
+                                City = reader.GetString(5),
+                                State = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
+                                PostalCode = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
+                                Phone = reader.IsDBNull(8) ? string.Empty : reader.GetString(8),
+                                Fax = reader.IsDBNull(9) ? string.Empty : reader.GetString(9),
+                            };
+                            customers.Add(customer);
+                        }
+                    }
+                }
+            }
+
+            return customers;
+        }
+
+
         public bool AddNewCustomer(Customer customer)
         {
             throw new NotImplementedException();
