@@ -12,6 +12,7 @@ namespace Project_SQLClientCRUD.Repositories
         public Customer GetCustomer(string id);
         public Customer GetCustomerByName(string name);
         public IEnumerable<Customer> GetAllCustomers();
+        public List<Customer> GetCustomersPage(int limit, int offset);
         public bool AddNewCustomer(Customer customer);
         public bool UpdateCustomer(Customer customer);
         public bool DeleteCustomer(string id);
