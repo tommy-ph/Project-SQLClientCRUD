@@ -16,5 +16,7 @@ namespace Project_SQLClientCRUD.Repositories
         public bool AddNewCustomer(Customer customer);
         public bool UpdateCustomer(Customer customer);
         public bool DeleteCustomer(string id);
+
+        public List<Customer> GetTopSpenders();
     }
 }

@@ -16,7 +16,8 @@ namespace Project_SQLClientCRUD
             //SelectCustomerById(repository);
             //SelectCustomerByName(repository);
             //SelectCustomersPage(repository);
-            Insert(repository);
+            //Insert(repository);
+            Update(repository);
             
             
         }
@@ -85,6 +86,7 @@ namespace Project_SQLClientCRUD
             if(repository.AddNewCustomer(customer))
             {
                 Console.WriteLine("Insert worked");
+                PrintCustomer(repository.GetCustomer("60"));
             }else
             {
                 Console.WriteLine("Checked insert again");
@@ -93,7 +95,24 @@ namespace Project_SQLClientCRUD
 
         static void Update(ICustomerRepository repository)
         {
-
+            Customer updatedCustomer = new Customer
+            {
+                FirstName = "Maryam",
+                LastName = "Al",
+                Country = "Irak",
+                PostalCode = "12345",
+                Phone = "555-555-1212",
+                Email = "maryamAl@gmail.com"
+            };
+            if(repository.UpdateCustomer(updatedCustomer) )
+            {
+                Console.WriteLine("Updated sucess");
+                PrintCustomer(repository.GetCustomer("60"));
+            }
+            else
+            {
+                Console.WriteLine("Unsuccess updated");
+            }
         }
         static void Delete(ICustomerRepository repository)
         {
