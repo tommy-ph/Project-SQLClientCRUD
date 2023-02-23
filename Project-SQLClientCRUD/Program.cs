@@ -1,4 +1,5 @@
-﻿using Project_SQLClientCRUD.Models;
+﻿using Microsoft.Data.SqlClient;
+using Project_SQLClientCRUD.Models;
 using Project_SQLClientCRUD.Repositories;
 using System.Collections.Generic;
 using System.Net;
@@ -17,7 +18,8 @@ namespace Project_SQLClientCRUD
             //SelectCustomerByName(repository);
             //SelectCustomersPage(repository);
             //Insert(repository);
-            Update(repository);
+            //Update(repository);
+            //ShowDifferentGroupCountries(repository);
             
             
         }
@@ -95,8 +97,9 @@ namespace Project_SQLClientCRUD
 
         static void Update(ICustomerRepository repository)
         {
-            Customer updatedCustomer = new Customer
+            Customer updatedCustomer = new Customer()
             {
+                CustomerId = 1,
                 FirstName = "Maryam",
                 LastName = "Al",
                 Country = "Irak",
@@ -107,16 +110,32 @@ namespace Project_SQLClientCRUD
             if(repository.UpdateCustomer(updatedCustomer) )
             {
                 Console.WriteLine("Updated sucess");
-                PrintCustomer(repository.GetCustomer("60"));
+                PrintCustomer(repository.GetCustomer("1"));
             }
             else
             {
                 Console.WriteLine("Unsuccess updated");
             }
         }
-        static void Delete(ICustomerRepository repository)
+        static void ShowDifferentGroupCountries(ICustomerRepository repository)
         {
 
+            var customerCountCountries = repository.GetNumberOfCustomersInEachCountry();
+            Console.WriteLine("\n** Customer each Country **");
+            Console.WriteLine("{0,-20} {1,-20}", "Country", "Count");
+            Console.WriteLine("************************************");
+            foreach (var customersCountry in customerCountCountries)
+            {
+                Console.WriteLine("{0,-20} {1,-20}", customersCountry.Country, customersCountry.CountCountry);
+            }
         }
+
+
+
+
+
+
+
+
     }
 }

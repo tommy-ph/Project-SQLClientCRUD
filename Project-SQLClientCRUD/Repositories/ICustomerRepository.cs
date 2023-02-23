@@ -15,8 +15,8 @@ namespace Project_SQLClientCRUD.Repositories
         public List<Customer> GetCustomersPage(int limit, int offset);
         public bool AddNewCustomer(Customer customer);
         public bool UpdateCustomer(Customer customer);
-        public bool DeleteCustomer(string id);
-
+        public IEnumerable<CustomersCountry> GetNumberOfCustomersInEachCountry();
+        
         public List<Customer> GetTopSpenders();
     }
 }
