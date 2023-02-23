@@ -20,8 +20,9 @@ namespace Project_SQLClientCRUD
             //Insert(repository);
             //Update(repository);
             //ShowDifferentGroupCountries(repository);
-            
-            
+            ShowCustomersTopSpenders(repository);
+
+
         }
 
         static void SelectAllCustomers(ICustomerRepository repository)
@@ -130,6 +131,17 @@ namespace Project_SQLClientCRUD
             }
         }
 
+        static void ShowCustomersTopSpenders(ICustomerRepository repository)
+        {
+            var customerTopSpenders = repository.GetTopSpenders();
+            Console.WriteLine("\n** Customer each Country **");
+            Console.WriteLine("{0,-20} {1,-20}", "Country", "Count");
+            Console.WriteLine("************************************");
+            foreach (var customerTopSpender in customerTopSpenders)
+            {
+                Console.WriteLine("{0,-20} {1,-20}", customerTopSpender.CustomerId, customerTopSpender.TotalTopSpent);
+            }
+        }
 
 
 

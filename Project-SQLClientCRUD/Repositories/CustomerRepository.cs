@@ -218,10 +218,10 @@ namespace Project_SQLClientCRUD.Repositories
                                "GROUP BY Country " +
                                "ORDER BY NumCustomers DESC";
 
-            using var connection = new SqlConnection(ConnectionstringHelper.GetConnectionString());
-            connection.Open();
+            using var conn = new SqlConnection(ConnectionstringHelper.GetConnectionString());
+            conn.Open();
 
-            SqlCommand cmd = new SqlCommand(sql, connection);
+            SqlCommand cmd = new SqlCommand(sql, conn);
             SqlDataReader reader = cmd.ExecuteReader();
 
             while(reader.Read())
@@ -235,9 +235,28 @@ namespace Project_SQLClientCRUD.Repositories
             return customersCountries;
         }
 
-        public List<Customer> GetTopSpenders()
+        public IEnumerable<CustomerSpender> GetTopSpenders()
         {
-            throw new NotImplementedException();
+            List<CustomerSpender> customerSpender = new List<CustomerSpender>();
+            string sql = "SELECT CustomerId, SUM(Total) AS TotalTopSpender " +
+                               "FROM Invoice " +
+                               "GROUP BY CustomerId " +
+                               "ORDER BY TotalTopSpender DESC;";
+            using var conn = new SqlConnection(ConnectionstringHelper.GetConnectionString());
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                int customerId = reader.GetInt32(0);
+                decimal totalTopSpent = reader.GetDecimal(1);
+                customerSpender.Add(new CustomerSpender { CustomerId = customerId, TotalTopSpent = totalTopSpent });
+            }
+            reader.Close();
+
+            return customerSpender;
         }
 
     }

@@ -17,6 +17,6 @@ namespace Project_SQLClientCRUD.Repositories
         public bool UpdateCustomer(Customer customer);
         public IEnumerable<CustomersCountry> GetNumberOfCustomersInEachCountry();
         
-        public List<Customer> GetTopSpenders();
+        public IEnumerable<CustomerSpender> GetTopSpenders();
     }
 }
