@@ -259,5 +259,46 @@ namespace Project_SQLClientCRUD.Repositories
             return customerSpender;
         }
 
+        public IEnumerable<CustomerGenre> GetTopCustomerGenres(int customerId)
+        {
+            List<CustomerGenre> customerTopGenres = new List<CustomerGenre>();
+            string sql = @"SELECT genre.Name AS GenreName, COUNT(track.GenreId) AS GenreCount
+                   FROM Customer customer
+                   INNER JOIN Invoice invoice ON customer.CustomerId = invoice.CustomerId
+                   INNER JOIN InvoiceLine invoiceLine ON invoice.InvoiceId = invoiceLine.InvoiceId
+                   INNER JOIN Track track ON invoiceLine.TrackId = track.TrackId
+                   INNER JOIN Genre genre ON track.GenreId = genre.GenreId
+                   WHERE customer.CustomerId = @customerId
+                   GROUP BY genre.Name
+                   HAVING COUNT(track.GenreId) = (
+                     SELECT MAX(GenreCount)
+                     FROM (
+                       SELECT COUNT(track.GenreId) AS GenreCount
+                       FROM Customer customer
+                       INNER JOIN Invoice invoice ON customer.CustomerId = invoice.CustomerId
+                       INNER JOIN InvoiceLine invoiceLine ON invoice.InvoiceId = invoiceLine.InvoiceId
+                       INNER JOIN Track track ON invoiceLine.TrackId = track.TrackId
+                       INNER JOIN Genre genre ON track.GenreId = genre.GenreId
+                       WHERE customer.CustomerId = @customerId
+                       GROUP BY genre.Name
+                     ) AS genreCounts
+                   )";
+
+            using var conn = new SqlConnection(ConnectionstringHelper.GetConnectionString());
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@customerId", customerId);
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                string name = reader.GetString(0);
+                int genreCount = reader.GetInt32(1);
+                customerTopGenres.Add(new CustomerGenre { Name = name, GenreCount = genreCount });
+            }
+            reader.Close();
+
+            return customerTopGenres;
+        }
     }
 }
