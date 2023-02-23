@@ -20,9 +20,8 @@ namespace Project_SQLClientCRUD
             //Insert(repository);
             //Update(repository);
             //ShowDifferentGroupCountries(repository);
-            ShowCustomersTopSpenders(repository);
-
-
+            //ShowCustomersTopSpenders(repository);
+            ShowTopCustomerGenres(repository);
         }
 
         static void SelectAllCustomers(ICustomerRepository repository)
@@ -79,7 +78,6 @@ namespace Project_SQLClientCRUD
             {
                 FirstName = "Tommy",
                 LastName = "Pham",
-                Company = "Experis",
                 Country = "Sweden",
                 PostalCode = "12345",
                 Phone = "0725559559",
@@ -134,14 +132,36 @@ namespace Project_SQLClientCRUD
         static void ShowCustomersTopSpenders(ICustomerRepository repository)
         {
             var customerTopSpenders = repository.GetTopSpenders();
-            Console.WriteLine("\n** Customer each Country **");
-            Console.WriteLine("{0,-20} {1,-20}", "Country", "Count");
+            Console.WriteLine("\n** Customer Topspender **");
+            Console.WriteLine("{0,-20} {1,-20}", "Customer", "TopSpender");
             Console.WriteLine("************************************");
             foreach (var customerTopSpender in customerTopSpenders)
             {
                 Console.WriteLine("{0,-20} {1,-20}", customerTopSpender.CustomerId, customerTopSpender.TotalTopSpent);
             }
         }
+
+        static void ShowTopCustomerGenres(ICustomerRepository repository)
+        {
+            Console.WriteLine("Enter a customer ID:");
+            int customerId = int.Parse(Console.ReadLine());
+
+            IEnumerable<CustomerGenre> customerTopGenres = repository.GetTopCustomerGenres(customerId);
+
+            if (customerTopGenres.Any())
+            {
+                Console.WriteLine($"Top genre(s) for customer {customerId}:");
+                foreach (CustomerGenre genre in customerTopGenres)
+                {
+                    Console.WriteLine($"Genre: {genre.Name}, Count: {genre.GenreCount}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"No top genres found for customer {customerId}.");
+            }
+        }
+
 
 
 
