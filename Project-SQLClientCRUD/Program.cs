@@ -11,18 +11,68 @@ namespace Project_SQLClientCRUD
     {
         static void Main(string[] args)
         {
-            // CRUD
             var repository = new CustomerRepository { ConnectionString = ConnectionstringHelper.GetConnectionString() };
-            //SelectAllCustomers(repository);
-            //SelectCustomerById(repository);
-            //SelectCustomerByName(repository);
-            //SelectCustomersPage(repository);
-            //Insert(repository);
-            //Update(repository);
-            //ShowDifferentGroupCountries(repository);
-            //ShowCustomersTopSpenders(repository);
-            ShowTopCustomerGenres(repository);
+
+            while (true)
+            {
+                Console.WriteLine("Please choose an option:");
+                Console.WriteLine("1. Select all customers");
+                Console.WriteLine("2. Select customer by ID");
+                Console.WriteLine("3. Select customer by name");
+                Console.WriteLine("4. Select customers by page");
+                Console.WriteLine("5. Insert customer");
+                Console.WriteLine("6. Update customer");
+                Console.WriteLine("7. Show different group countries");
+                Console.WriteLine("8. Show top spenders");
+                Console.WriteLine("9. Show top customer genres");
+                Console.WriteLine("0. Exit");
+
+                var choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        SelectAllCustomers(repository);
+                        break;
+                    case "2":
+                        SelectCustomerById(repository);
+                        break;
+                    case "3":
+                        SelectCustomerByName(repository);
+                        break;
+                    case "4":
+                        SelectCustomersPage(repository);
+                        break;
+                    case "5":
+                        Insert(repository);
+                        break;
+                    case "6":
+                        Update(repository);
+                        break;
+                    case "7":
+                        ShowDifferentGroupCountries(repository);
+                        break;
+                    case "8":
+                        ShowCustomersTopSpenders(repository);
+                        break;
+                    case "9":
+                        ShowTopCustomerGenres(repository);
+                        break;
+                    case "0":
+                        Console.WriteLine("Exiting program...");
+                        return;
+                    default:
+                        Console.WriteLine("Invalid choice, please try again.");
+                        break;
+                }
+
+                Console.WriteLine(); // blank line for formatting purposes
+                Console.WriteLine("Press any key to return to the main menu.");
+                Console.ReadKey();
+                Console.Clear(); // clear the console before showing the menu again
+            }
         }
+
 
         static void SelectAllCustomers(ICustomerRepository repository)
         {
