@@ -185,19 +185,14 @@ namespace Project_SQLClientCRUD.Repositories
             return success;
         }
 
-
-        public bool DeleteCustomer(string id)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool UpdateCustomer(Customer customer)
         {
 
             bool success = false;
-            string sql = "UPDATE Customer "+
-                "SET FirstName = @FirstName, LastName = @LastName, " +
-                "Country = @Country, PostalCode = @PostalCode, Phone = @Phone, Email = @Email";
+            string sql = "UPDATE Customer SET FirstName = @FirstName, LastName = @LastName, " +
+             "Country = @Country, PostalCode = @PostalCode, Phone = @Phone, Email = @Email " +
+             "WHERE CustomerId = 5";
+
             using (SqlConnection conn = new SqlConnection(ConnectionstringHelper.GetConnectionString()))
             {
                 conn.Open();
@@ -215,9 +210,35 @@ namespace Project_SQLClientCRUD.Repositories
             return success;
         }
 
+        public IEnumerable<CustomersCountry> GetNumberOfCustomersInEachCountry()
+        {
+            List<CustomersCountry> customersCountries = new List<CustomersCountry>();
+            string sql = "SELECT Country, COUNT(*) AS NumCustomers " +
+                               "FROM Customer " +
+                               "GROUP BY Country " +
+                               "ORDER BY NumCustomers DESC";
+
+            using var connection = new SqlConnection(ConnectionstringHelper.GetConnectionString());
+            connection.Open();
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while(reader.Read())
+            {
+                string country = reader.GetString(0);
+                int customerCount = reader.GetInt32(1);
+                customersCountries.Add(new CustomersCountry { Country = country, CountCountry = customerCount });
+            }
+            reader.Close();
+
+            return customersCountries;
+        }
+
         public List<Customer> GetTopSpenders()
         {
             throw new NotImplementedException();
         }
+
     }
 }
